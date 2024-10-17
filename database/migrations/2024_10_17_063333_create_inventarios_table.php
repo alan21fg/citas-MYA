@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_producto');
-            $table->foreign('id_producto')->references('id')->on('productos')->onDelete('cascade');
+            //$table->foreign('id_producto')->references('id')->on('productos')->onDelete('cascade');
             $table->integer('cantidad_disponible')->unsigned()->nullable(false);
             $table->integer('punto_reorden')->unsigned()->nullable(false);
             $table->timestamps();

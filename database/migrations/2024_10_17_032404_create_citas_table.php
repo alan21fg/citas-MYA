@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_cliente');
-            $table->foreign('id_cliente')->references('id')->on('clientes')->onDelete('cascade');
+            //$table->foreign('id_cliente')->references('id')->on('clientes')->onDelete('cascade');
             $table->unsignedBigInteger('id_empleado');
-            $table->foreign('id_empleado')->references('id')->on('empleados')->onDelete('cascade');
+            //$table->foreign('id_empleado')->references('id')->on('empleados')->onDelete('cascade');
             $table->unsignedBigInteger('id_servicio');
-            $table->foreign('id_servicio')->references('id')->on('servicios')->onDelete('cascade');
+            //$table->foreign('id_servicio')->references('id')->on('servicios')->onDelete('cascade');
             $table->date('fecha')->nullable(false);
             $table->time('hora')->nullable(false);
             $table->string('estado')->nullable(false);

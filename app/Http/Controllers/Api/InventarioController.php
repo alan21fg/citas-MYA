@@ -41,10 +41,9 @@ class InventarioController extends Controller
      */
     public function update(StoreInventarioRequest $request, string $id)
     {
-        $inventario = Inventario::create($request->validated());
-
         $inventario = Inventario::findOrFail($id);
-        $inventario->update($request->all());
+
+        $inventario->update($request->validated());
 
         return response()->json($inventario, 200);
     }

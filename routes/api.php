@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\ServicioController;
 use App\Http\Controllers\Api\CitaController;
 use App\Http\Controllers\Api\ClienteController;
 use App\Http\Controllers\Api\EmpleadoController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\RolController;
 
 Route::apiResource('inventarios', InventarioController::class);
 Route::apiResource('productos', ProductoController::class);
@@ -15,6 +17,8 @@ Route::apiResource('servicios', ServicioController::class);
 Route::apiResource('citas', CitaController::class);
 Route::apiResource('clientes', ClienteController::class);
 Route::apiResource('empleados', EmpleadoController::class);
+Route::apiResource('users', UserController::class);
+Route::apiResource('roles', RolController::class);
 
 Route::get('/user', function (Request $request) {
     return $request->user();

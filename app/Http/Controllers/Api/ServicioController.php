@@ -14,9 +14,10 @@ class ServicioController extends Controller
      */
     public function index()
     {
-        $servicios = Servicio::all();
+        $servicios = Servicio::with('productos')->get();
         return response()->json($servicios, 200);
     }
+
 
     /**
      * Store a newly created resource in storage.

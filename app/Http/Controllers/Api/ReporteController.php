@@ -10,46 +10,57 @@ use Illuminate\Http\Request;
 
 class ReporteController extends Controller
 {
-    // Reporte de estado del inventario
-    public function reporteInventario()
-    {
-        $inventarios = Inventario::all();
-        return response()->json($inventarios, 200);
-    }
-
-    // Reporte de ingresos diarios
-    public function reporteIngresosDiarios()
-    {
-        $fechaHoy = Carbon::today();  // Fecha de hoy
-        $citasHoy = Cita::whereDate('fecha', $fechaHoy)->get();
-
-        // Calcular ingresos del día sumando los precios de los servicios realizados
-        $ingresosTotales = $citasHoy->sum(function($cita) {
-            return $cita->servicio->precio;
-        });
-
-        return response()->json([
-            'fecha' => $fechaHoy->toDateString(),
-            'ingresosTotales' => $ingresosTotales,
-            'citas' => $citasHoy,
-        ], 200);
-    }
-
-    // Reporte del rendimiento general (ejemplo: ingresos mensuales)
-    public function reporteRendimientoGeneral()
+    // Reporte de estadísticas generales del mes
+    public function reporteEstadisticasMes()
     {
         $fechaInicioMes = Carbon::now()->startOfMonth();
         $fechaFinMes = Carbon::now()->endOfMonth();
 
         $citasMes = Cita::whereBetween('fecha', [$fechaInicioMes, $fechaFinMes])->get();
-        $ingresosMensuales = $citasMes->sum(function($cita) {
-            return $cita->servicio->precio;
-        });
+        $ingresosMensuales = $citasMes->sum(fn($cita) => $cita->servicio->precio);
 
         return response()->json([
             'mes' => Carbon::now()->format('F Y'),
             'ingresosMensuales' => $ingresosMensuales,
             'totalCitas' => $citasMes->count(),
         ], 200);
+    }
+
+    // Reporte de citas próximas (siguientes tres días)
+    public function reporteCitasProximas()
+    {
+        $fechaHoy = Carbon::today();
+        $fechaLimite = $fechaHoy->copy()->addDays(3);
+
+        $citasProximas = Cita::whereBetween('fecha', [$fechaHoy, $fechaLimite])
+            ->with(['cliente', 'servicio'])
+            ->get();
+
+        return response()->json($citasProximas, 200);
+    }
+
+    // Reporte de inventario crítico (productos con stock bajo el punto de reorden)
+    public function reporteInventarioCritico()
+    {
+        $inventarioCritico = Inventario::whereColumn('cantidad_disponible', '<=', 'punto_reorden')
+            ->with('producto')
+            ->get();
+
+        return response()->json($inventarioCritico, 200);
+    }
+
+    // Reporte de citas por mes para graficar
+    public function reporteCitasPorMes()
+    {
+        $mesActual = Carbon::now()->month;
+        $citasPorMes = Cita::selectRaw('MONTH(fecha) as mes, COUNT(*) as total')
+            ->groupBy('mes')
+            ->get()
+            ->map(fn($item) => [
+                'name' => Carbon::create()->month($item->mes)->format('F'),
+                'value' => $item->total
+            ]);
+
+        return response()->json($citasPorMes, 200);
     }
 }

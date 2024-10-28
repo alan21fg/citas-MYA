@@ -20,9 +20,10 @@ Route::apiResource('clientes', ClienteController::class);
 Route::apiResource('empleados', EmpleadoController::class);
 Route::apiResource('users', UserController::class);
 Route::apiResource('roles', RolController::class);
-Route::get('reportes/inventario', [ReporteController::class, 'reporteInventario']);
-Route::get('reportes/ingresos-diarios', [ReporteController::class, 'reporteIngresosDiarios']);
-Route::get('reportes/rendimiento-general', [ReporteController::class, 'reporteRendimientoGeneral']);
+Route::get('reportes/estadisticas-mes', [ReporteController::class, 'reporteEstadisticasMes']);
+Route::get('reportes/citas-proximas', [ReporteController::class, 'reporteCitasProximas']);
+Route::get('reportes/inventario-critico', [ReporteController::class, 'reporteInventarioCritico']);
+Route::get('reportes/citas-por-mes', [ReporteController::class, 'reporteCitasPorMes']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();

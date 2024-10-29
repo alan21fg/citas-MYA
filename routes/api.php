@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\EmpleadoController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RolController;
 use App\Http\Controllers\Api\ReporteController;
+use App\Http\Controllers\Api\AuthController;
+
+Route::post('login', [AuthController::class, 'login']);
 
 Route::apiResource('inventarios', InventarioController::class);
 Route::apiResource('productos', ProductoController::class);
@@ -25,6 +28,7 @@ Route::get('reportes/citas-proximas', [ReporteController::class, 'reporteCitasPr
 Route::get('reportes/inventario-critico', [ReporteController::class, 'reporteInventarioCritico']);
 Route::get('reportes/citas-por-mes', [ReporteController::class, 'reporteCitasPorMes']);
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('users', UserController::class);
+    // Otras rutas protegidas
+});

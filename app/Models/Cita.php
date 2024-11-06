@@ -16,6 +16,9 @@ class Cita extends Model
         'id_servicio',
     ];
 
+    protected $dates = ['fecha', 'hora'];
+
+
     // Relación con Cliente
     public function cliente()
     {

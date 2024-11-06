@@ -21,7 +21,7 @@ return new class extends Migration
             //$table->foreign('id_servicio')->references('id')->on('servicios')->onDelete('cascade');
             $table->date('fecha')->nullable(false);
             $table->time('hora')->nullable(false);
-            $table->string('estado')->nullable(false);
+            $table->enum('estado', ['Pendiente', 'Completada', 'Cancelada']);
             $table->timestamps();
         });
     }

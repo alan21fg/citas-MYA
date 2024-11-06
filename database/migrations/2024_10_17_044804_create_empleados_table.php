@@ -17,8 +17,8 @@ return new class extends Migration
             //$table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('id_rol');
             //$table->foreign('id_rol')->references('id')->on('roles')->onDelete('cascade');
-            $table->string('nombre')->nullable(false);
-            $table->string('apellido')->nullable(false);
+            $table->string('nombre', 100)->nullable(false);
+            $table->string('apellido', 100)->nullable(false);
             $table->string('telefono', 10)->nullable(false);
             $table->timestamps();
         });

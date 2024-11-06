@@ -12,7 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // $middleware->add(\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class); // Middleware para Sanctum
+        // $middleware->add(\Illuminate\Routing\Middleware\SubstituteBindings::class); // Necesario para API bindings
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

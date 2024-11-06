@@ -17,6 +17,6 @@ class Producto extends Model
     // Relación muchos a muchos con servicios
     public function servicios()
     {
-        return $this->belongsToMany(Servicio::class, 'producto_servicio');
+        return $this->belongsToMany(Servicio::class, 'producto_servicio')->withTimestamps();
     }
 }

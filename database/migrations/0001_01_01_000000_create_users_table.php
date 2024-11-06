@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_rol');
             //$table->foreign('id_rol')->references('id')->on('roles')->onDelete('cascade');
-            $table->string('name');
+            $table->string('name', 100);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

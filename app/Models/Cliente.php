@@ -16,6 +16,6 @@ class Cliente extends Model
     // Definir la relación con citas
     public function citas()
     {
-        return $this->hasMany(Cita::class);
+        return $this->hasMany(Cita::class, 'id_cliente');
     }
 }

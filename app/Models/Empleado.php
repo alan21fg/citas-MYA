@@ -18,12 +18,12 @@ class Empleado extends Model
     // Relación con Usuario
     public function usuario()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_usuario');
     }
 
     // Relación con Rol
     public function rol()
     {
-        return $this->belongsTo(Rol::class);
+        return $this->belongsTo(Rol::class, 'id_rol');
     }
 }

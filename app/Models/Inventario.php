@@ -16,6 +16,6 @@ class Inventario extends Model
     // Relación con productos
     public function producto()
     {
-        return $this->belongsTo(Producto::class);
+        return $this->belongsTo(Producto::class, 'id_producto');
     }
 }

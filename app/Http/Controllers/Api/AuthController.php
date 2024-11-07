@@ -24,4 +24,15 @@ class AuthController extends Controller
 
         return response()->json(['error' => 'Unauthorized'], 401);
     }
+
+    /**
+     * Cierra la sesión del usuario autenticado
+     */
+    public function logout(Request $request)
+    {
+        // Revoca el token de acceso actual
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully'], 200);
+    }
 }

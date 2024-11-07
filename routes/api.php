@@ -15,6 +15,10 @@ use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 // Ruta pública para el inicio de sesión
 Route::post('login', [AuthController::class, 'login']);
+
+// Ruta protegida para cerrar sesión
+Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+
 Route::apiResource('inventarios', InventarioController::class);
 Route::apiResource('productos', ProductoController::class);
 Route::apiResource('servicios', ServicioController::class);

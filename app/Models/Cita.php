@@ -22,18 +22,18 @@ class Cita extends Model
     // Relación con Cliente
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class, 'id_cliente');
+        return $this->belongsTo(Cliente::class, 'id');
     }
 
     // Relación con Empleado
     public function empleado()
     {
-        return $this->belongsTo(Empleado::class, 'id_empleado');
+        return $this->belongsTo(Empleado::class, 'id');
     }
 
     // Relación con Servicio
     public function servicio()
     {
-        return $this->belongsTo(Servicio::class, 'id_servicio');
+        return $this->belongsTo(Servicio::class, 'id');
     }
 }

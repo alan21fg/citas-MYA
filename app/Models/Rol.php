@@ -15,12 +15,12 @@ class Rol extends Model
     // Relación con usuarios
     public function usuarios()
     {
-        return $this->hasMany(User::class, 'id_user');
+        return $this->hasMany(User::class, 'id');
     }
 
     // Relación con empleados
     public function empleados()
     {
-        return $this->hasMany(Empleado::class, 'id_empleado');
+        return $this->hasMany(Empleado::class, 'id');
     }
 }

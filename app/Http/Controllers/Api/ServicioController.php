@@ -43,7 +43,10 @@ class ServicioController extends Controller
      */
     public function show(string $id)
     {
-        $servicio = Servicio::with('productos')->findOrFail($id);
+        $servicio = Servicio::with(['productos' => function ($query) {
+            $query->select('productos.*', 'producto_servicio.cantidad as cantidad'); // Incluimos la cantidad del pivote
+        }])->findOrFail($id);
+
         return response()->json($servicio, 200);
     }
 

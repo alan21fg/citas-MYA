@@ -5,34 +5,61 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class AuthController extends Controller
 {
+    /**
+     * Maneja el inicio de sesión del usuario.
+     */
     public function login(Request $request)
     {
-        $credentials = $request->only('name', 'password');
+        // Validación de las credenciales
+        $credentials = $request->validate([
+            'name' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
 
+        // Intento de autenticación
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('AuthToken')->plainTextToken;
+            // Regeneración de la sesión para evitar fijación de sesión
+            $request->session()->regenerate();
+
+            // Respuesta de éxito con datos del usuario autenticado
             return response()->json([
-                'token' => $token,
-                'user' => $user
+                'user' => Auth::user()
             ], 200);
         }
 
+        // Respuesta en caso de fallo de autenticación
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     /**
-     * Cierra la sesión del usuario autenticado
+     * Cierra la sesión del usuario autenticado.
      */
     public function logout(Request $request)
     {
-        // Revoca el token de acceso actual
-        $request->user()->currentAccessToken()->delete();
+        // Invalida la sesión del usuario actual
+        Auth::logout();
 
+        // Limpia la sesión y regenera el token CSRF
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Respuesta de éxito al cerrar sesión
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
+
+    // Obtener datos del empleado autenticado
+    // public function empleadoAutenticado()
+    // {
+    //     $user = Auth::empleado();
+    //     $empleado = $user->empleado()->with('rol')->first();
+
+    //     if ($empleado) {
+    //         return response()->json($empleado, 200);
+    //     }
+
+    //     return response()->json(['error' => 'Empleado no encontrado'], 404);
+    // }
 }

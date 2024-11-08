@@ -1,16 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\InventarioController;
-use App\Http\Controllers\Api\ProductoController;
-use App\Http\Controllers\Api\ServicioController;
-use App\Http\Controllers\Api\CitaController;
-use App\Http\Controllers\Api\ClienteController;
-use App\Http\Controllers\Api\EmpleadoController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\RolController;
-use App\Http\Controllers\Api\ReporteController;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\{
+    InventarioController,
+    ProductoController,
+    ServicioController,
+    CitaController,
+    ClienteController,
+    EmpleadoController,
+    UserController,
+    RolController,
+    ReporteController,
+    AuthController
+};
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 // Ruta pública para el inicio de sesión
@@ -18,6 +20,7 @@ Route::post('login', [AuthController::class, 'login']);
 
 // Ruta protegida para cerrar sesión
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+// Route::get('empleado-autenticado', [AuthController::class, 'empleadoAutenticado']);
 
 Route::apiResource('inventarios', InventarioController::class);
 Route::apiResource('productos', ProductoController::class);
@@ -36,6 +39,9 @@ Route::get('reportes/citas-por-mes', [ReporteController::class, 'reporteCitasPor
 
 // Rutas protegidas con auth:sanctum
 Route::middleware('auth:sanctum', EnsureFrontendRequestsAreStateful::class)->group(function () {
+    // Route::post('logout', [AuthController::class, 'logout']);
+    // Route::get('empleado-autenticado', [AuthController::class, 'empleadoAutenticado']);
+
     // Route::apiResource('inventarios', InventarioController::class);
     // Route::apiResource('productos', ProductoController::class);
     // Route::apiResource('servicios', ServicioController::class);

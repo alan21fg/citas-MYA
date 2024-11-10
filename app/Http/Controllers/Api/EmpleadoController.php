@@ -14,7 +14,7 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        $empleados = Empleado::with('rol')->get();
+        $empleados = Empleado::with('usuario', 'rol')->get();
         return response()->json($empleados, 200);
     }
 
@@ -32,7 +32,7 @@ class EmpleadoController extends Controller
      */
     public function show(string $id)
     {
-        $empleado = Empleado::with('rol')->findOrFail($id);
+        $empleado = Empleado::with('usuario','rol')->findOrFail($id);
         return response()->json($empleado, 200);
     }
 

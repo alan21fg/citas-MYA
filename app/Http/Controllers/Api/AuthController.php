@@ -49,17 +49,4 @@ class AuthController extends Controller
         // Respuesta de éxito al cerrar sesión
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
-
-    // Obtener datos del empleado autenticado
-    // public function empleadoAutenticado()
-    // {
-    //     $user = Auth::empleado();
-    //     $empleado = $user->empleado()->with('rol')->first();
-
-    //     if ($empleado) {
-    //         return response()->json($empleado, 200);
-    //     }
-
-    //     return response()->json(['error' => 'Empleado no encontrado'], 404);
-    // }
 }

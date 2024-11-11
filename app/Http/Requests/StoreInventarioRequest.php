@@ -22,7 +22,7 @@ class StoreInventarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_producto' => 'required|exists:productos,id',
+            'id_producto' => 'required',
             'cantidad_disponible' => 'required|integer|min:0',
             'punto_reorden' => 'required|integer|min:0',
         ];

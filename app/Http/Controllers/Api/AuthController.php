@@ -26,7 +26,7 @@ class AuthController extends Controller
 
             // Respuesta de éxito con datos del usuario autenticado
             return response()->json([
-                'user' => Auth::user()
+                'usuario' => Auth::user()
             ], 200);
         }
 

@@ -26,6 +26,7 @@ class StoreProductoRequest extends FormRequest
             'descripcion' => 'required|string',
             'precio_unitario' => 'required|numeric',
             'tipo' => 'required|string',
+            'fecha_caducidad' => 'required|date',
         ];
     }
 }

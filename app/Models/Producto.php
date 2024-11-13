@@ -12,6 +12,7 @@ class Producto extends Model
         'descripcion',
         'precio_unitario',
         'tipo',
+        'fecha_caducidad',
     ];
 
     // Relación muchos a muchos con servicios

@@ -25,8 +25,8 @@ class StoreEmpleadoRequest extends FormRequest
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
             'telefono' => 'required|string|size:10',
-            'id_rol' => 'required|exists:roles,id',
-            'id_usuario' => 'required|exists:users,id',
+            'id_rol' => 'exists:roles,id',
+            'id_usuario' => 'exists:users,id',
         ];
     }
 }

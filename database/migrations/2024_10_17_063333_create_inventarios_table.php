@@ -17,6 +17,7 @@ return new class extends Migration
             //$table->foreign('id_producto')->references('id')->on('productos')->onDelete('cascade');
             $table->integer('cantidad_disponible')->unsigned()->nullable(false);
             $table->integer('punto_reorden')->unsigned()->nullable(false);
+            $table->double('precio_compra', 8, 2)->nullable(false);
             $table->timestamps();
         });
     }

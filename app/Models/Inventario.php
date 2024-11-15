@@ -11,6 +11,7 @@ class Inventario extends Model
         'id_producto',
         'cantidad_disponible',
         'punto_reorden',
+        'precio_compra',
     ];
 
     // Relación con productos

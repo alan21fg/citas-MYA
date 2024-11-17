@@ -26,9 +26,10 @@ class StoreServicioRequest extends FormRequest
             'descripcion' => 'required|string',
             'precio' => 'required|numeric|min:0',
             'duracion' => 'required|integer|min:1',
-            'productos' => 'array', // Valida que productos sea un array
-            'productos.*.id_producto' => 'required|exists:productos,id', // Cada producto debe existir en la tabla productos
-            'productos.*.cantidad' => 'required|integer|min:1', // Cantidad mínima de 1
+            'productos' => 'nullable|array',
+            'productos.*.id_producto' => 'nullable|exists:productos,id',
+            'productos.*.cantidad' => 'nullable|integer|min:1',
         ];
     }
+
 }

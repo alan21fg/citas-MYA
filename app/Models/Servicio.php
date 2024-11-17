@@ -17,7 +17,7 @@ class Servicio extends Model
     // Relación muchos a muchos con productos
     public function productos()
     {
-        return $this->belongsToMany(Producto::class, 'producto_servicio')
+        return $this->belongsToMany(Producto::class, 'producto_servicio', 'id_servicio', 'id_producto')
             ->withPivot('cantidad')
             ->withTimestamps();
     }

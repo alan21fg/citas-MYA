@@ -27,13 +27,16 @@ class ServicioController extends Controller
         $servicio = Servicio::create($request->validated());
 
         // Asociar productos con cantidades (asume que el request tiene un array 'productos' con id_producto y cantidad)
-        if ($request->has('productos')) {
+        if ($request->has('productos') && count($request->productos) > 0) {
             $productos = [];
             foreach ($request->productos as $producto) {
-                $productos[$producto['id_producto']] = ['cantidad' => $producto['cantidad']];
+                if (isset($producto['id_producto']) && isset($producto['cantidad'])) {
+                    $productos[$producto['id_producto']] = ['cantidad' => $producto['cantidad']];
+                }
             }
             $servicio->productos()->sync($productos);
         }
+
 
         return response()->json($servicio->load('productos'), 201); // Devuelve el servicio con los productos asociados
     }
@@ -43,9 +46,11 @@ class ServicioController extends Controller
      */
     public function show(string $id)
     {
-        $servicio = Servicio::with(['productos' => function ($query) {
-            $query->select('productos.*', 'producto_servicio.cantidad as cantidad'); // Incluimos la cantidad del pivote
-        }])->findOrFail($id);
+        $servicio = Servicio::with([
+            'productos' => function ($query) {
+                $query->select('productos.*', 'producto_servicio.cantidad as cantidad'); // Incluimos la cantidad del pivote
+            }
+        ])->findOrFail($id);
 
         return response()->json($servicio, 200);
     }
@@ -60,13 +65,16 @@ class ServicioController extends Controller
         $servicio->update($request->validated());
 
         // Actualizar productos asociados con cantidades
-        if ($request->has('productos')) {
+        if ($request->has('productos') && count($request->productos) > 0) {
             $productos = [];
             foreach ($request->productos as $producto) {
-                $productos[$producto['id_producto']] = ['cantidad' => $producto['cantidad']];
+                if (isset($producto['id_producto']) && isset($producto['cantidad'])) {
+                    $productos[$producto['id_producto']] = ['cantidad' => $producto['cantidad']];
+                }
             }
             $servicio->productos()->sync($productos);
         }
+
 
         return response()->json($servicio->load('productos'), 200); // Devuelve el servicio con los productos actualizados
     }

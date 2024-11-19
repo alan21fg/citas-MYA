@@ -23,7 +23,7 @@ class StoreProductoRequest extends FormRequest
     {
         return [
             'nombre_producto' => 'required|string',
-            'descripcion' => 'string',
+            'descripcion' => 'nullable|string',
             'precio_unitario' => 'required|numeric',
             'tipo' => 'required|string',
             'fecha_caducidad' => 'required|date',

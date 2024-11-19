@@ -49,7 +49,7 @@ class CitaController extends Controller
         $cita->update($request->validated());
 
         // Si el estado ha cambiado a "completado", actualiza el inventario
-        if ($originalEstado !== 'completado' && $cita->estado === 'Completada') {
+        if ($originalEstado !== 'Cita Concluida' && $cita->estado === 'Cita Concluida') {
             $this->actualizarInventario($cita);
         }
 

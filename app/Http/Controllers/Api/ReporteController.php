@@ -16,7 +16,10 @@ class ReporteController extends Controller
         $fechaInicioMes = Carbon::now()->startOfMonth();
         $fechaFinMes = Carbon::now()->endOfMonth();
 
-        $citasMes = Cita::whereBetween('fecha', [$fechaInicioMes, $fechaFinMes])->get();
+        $citasMes = Cita::whereBetween('fecha', [$fechaInicioMes, $fechaFinMes])
+            ->where('estado', 'Cita Concluida') // Solo incluye citas concluidas
+            ->get();
+
         $ingresosMensuales = $citasMes->sum(fn($cita) => $cita->servicio->precio);
 
         return response()->json([
@@ -25,6 +28,7 @@ class ReporteController extends Controller
             'totalCitas' => $citasMes->count(),
         ], 200);
     }
+
 
     // Reporte de citas próximas (siguientes tres días)
     public function reporteCitasProximas()

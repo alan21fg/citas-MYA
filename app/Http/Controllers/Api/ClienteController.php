@@ -14,7 +14,7 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = Cliente::all();
+        $clientes = Cliente::with(['citas.servicio', 'citas.empleado'])->get();
         return response()->json($clientes, 200);
     }
 
@@ -32,9 +32,10 @@ class ClienteController extends Controller
      */
     public function show(string $id)
     {
-        $cliente = Cliente::findOrFail($id);
+        $cliente = Cliente::with(['citas.servicio', 'citas.empleado'])->findOrFail($id);
         return response()->json($cliente, 200);
     }
+
 
     /**
      * Update the specified resource in storage.

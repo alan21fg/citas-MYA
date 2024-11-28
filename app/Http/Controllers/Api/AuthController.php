@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -20,19 +21,24 @@ class AuthController extends Controller
         ]);
 
         // Intento de autenticación
-        if (Auth::attempt($credentials)) {
+        if (Auth::guard('web')->attempt($credentials)) {
             // Regeneración de la sesión para evitar fijación de sesión
             $request->session()->regenerate();
 
+            // Cargar usuario con relación 'rol'
+            $usuario = User::with('rol')->find(Auth::id());
+
             // Respuesta de éxito con datos del usuario autenticado
             return response()->json([
-                'usuario' => Auth::user()
+                'usuario' => $usuario,
             ], 200);
         }
 
         // Respuesta en caso de fallo de autenticación
         return response()->json(['error' => 'Unauthorized'], 401);
     }
+
+
 
     /**
      * Cierra la sesión del usuario autenticado.

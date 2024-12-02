@@ -17,8 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Registrar middlewares de grupo
         $middleware->group('api', [
             // Otros middlewares específicos del grupo API
-            EnsureFrontendRequestsAreStateful::class, // Maneja solicitudes stateful
+            EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
 
         $middleware->group('web', [
@@ -26,6 +27,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            Laravel\Sanctum\Http\Middleware\AuthenticateSession::class,
+            Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -12,4 +12,4 @@ Route::get('/sanctum/csrf-cookie', function () {
 });
 
 // Ruta pública para el inicio de sesión
-Route::post('login', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'login'])->name('login');

@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\CustomEnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CustomCorsMiddleware::class,
         ]);
 
         $middleware->group('web', [
@@ -32,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             Laravel\Sanctum\Http\Middleware\AuthenticateSession::class,
             Illuminate\Cookie\Middleware\EncryptCookies::class,
             \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            \App\Http\Middleware\CustomCorsMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -4,8 +4,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
-
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
@@ -17,8 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Registrar middlewares de grupo
         $middleware->group('api', [
             // Otros middlewares específicos del grupo API
-            EnsureFrontendRequestsAreStateful::class,
-            \App\Http\Middleware\CustomEnsureFrontendRequestsAreStateful::class,
+            \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CustomCorsMiddleware::class,
@@ -28,11 +25,8 @@ return Application::configure(basePath: dirname(__DIR__))
             // Middlewares específicos para rutas web
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \App\Http\Middleware\CustomEnsureFrontendRequestsAreStateful::class,
-            Laravel\Sanctum\Http\Middleware\AuthenticateSession::class,
-            Illuminate\Cookie\Middleware\EncryptCookies::class,
             \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
             \App\Http\Middleware\CustomCorsMiddleware::class,
         ]);
     })

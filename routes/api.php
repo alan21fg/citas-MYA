@@ -14,15 +14,12 @@ use App\Http\Controllers\Api\{
     AuthController
 };
 
-Route::get('/sanctum/csrf-cookie', function () {
-    return response()->noContent();
-});
-
-Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+// Rutas protegidas por JWT
+Route::middleware(['jwt.auth'])->group(function () {
     // Cerrar sesión
     Route::post('logout', [AuthController::class, 'logout']);
 
-    // // Recursos protegidos
+    // Recursos protegidos
     Route::apiResource('inventarios', InventarioController::class);
     Route::apiResource('productos', ProductoController::class);
     Route::apiResource('servicios', ServicioController::class);

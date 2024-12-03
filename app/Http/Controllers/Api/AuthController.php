@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
@@ -20,39 +22,36 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        // Intento de autenticación
-        if (Auth::guard('web')->attempt($credentials)) {
-            // Regeneración de la sesión para evitar fijación de sesión
-            $request->session()->regenerate();
-
-            // Cargar usuario con relación 'rol'
-            $usuario = User::with('rol')->find(Auth::id());
-
-            // Respuesta de éxito con datos del usuario autenticado
-            return response()->json([
-                'usuario' => $usuario,
-            ], 200);
+        try {
+            // Intento de autenticación y generación del token
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Could not create token'], 500);
         }
 
-        // Respuesta en caso de fallo de autenticación
-        return response()->json(['error' => 'Unauthorized'], 401);
+        // Cargar usuario con relación 'rol'
+        $usuario = User::with('rol')->find(Auth::id());
+
+        // Respuesta con token y datos del usuario
+        return response()->json([
+            'usuario' => $usuario,
+            'token' => $token,
+        ], 200);
     }
-
-
 
     /**
      * Cierra la sesión del usuario autenticado.
      */
-    public function logout(Request $request)
+    public function logout()
     {
-        // Invalida la sesión del usuario actual
-        Auth::logout();
-
-        // Limpia la sesión y regenera el token CSRF
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        // Respuesta de éxito al cerrar sesión
-        return response()->json(['message' => 'Logged out successfully'], 200);
+        try {
+            // Invalidar el token
+            JWTAuth::invalidate(JWTAuth::getToken());
+            return response()->json(['message' => 'Logged out successfully'], 200);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Could not log out'], 500);
+        }
     }
 }

@@ -17,17 +17,17 @@ return [
 
     'paths' => ['api/*', 'login', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 
     'allowed_origins' => ['http://localhost:4200'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*', 'Content-Type', 'X-Requested-With', 'Authorization', 'X-CSRF-TOKEN'],
+    'allowed_headers' => ['Content-Type', 'X-Requested-With', 'Authorization', 'X-CSRF-TOKEN'],
 
-    'exposed_headers' => ['*'],
+    'exposed_headers' => ['X-Custom-Header', 'Authorization'],
 
-    'max_age' => 0,
+    'max_age' => 3600,
 
     'supports_credentials' => true,
 

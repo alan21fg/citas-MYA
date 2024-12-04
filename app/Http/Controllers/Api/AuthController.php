@@ -21,7 +21,6 @@ class AuthController extends Controller
             'name' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
-
         try {
             // Intento de autenticación y generación del token
             if (!$token = JWTAuth::attempt($credentials)) {

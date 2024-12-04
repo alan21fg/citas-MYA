@@ -16,19 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->group('api', [
             // Otros middlewares específicos del grupo API
             \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\CustomCorsMiddleware::class,
+            \Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
         ]);
 
-        $middleware->group('web', [
-            // Middlewares específicos para rutas web
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
-            \App\Http\Middleware\CustomCorsMiddleware::class,
-        ]);
+        $middleware->group('web', []);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -89,4 +89,20 @@ class ServicioController extends Controller
 
         return response()->json(null, 204);
     }
+
+    /**
+     * Eliminar un producto de un servicio específico.
+     */
+    public function eliminarProductoDeServicio(string $idServicio, string $idProducto)
+    {
+        // Buscar el servicio
+        $servicio = Servicio::findOrFail($idServicio);
+
+        // Eliminar la relación en la tabla pivote (producto_servicio)
+        $servicio->productos()->detach($idProducto);
+
+        // Devolver una respuesta exitosa
+        return response()->json(['message' => 'Producto eliminado de servicio'], 200);
+    }
+
 }

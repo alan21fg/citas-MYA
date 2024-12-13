@@ -34,4 +34,7 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::get('reportes/citas-proximas', [ReporteController::class, 'reporteCitasProximas']);
     Route::get('reportes/inventario-critico', [ReporteController::class, 'reporteInventarioCritico']);
     Route::get('reportes/citas-por-mes', [ReporteController::class, 'reporteCitasPorMes']);
+
+    Route::delete('servicios/{idServicio}/productos/{idProducto}', [ServicioController::class, 'eliminarProductoDeServicio']);
+
 });

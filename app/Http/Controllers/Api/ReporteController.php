@@ -58,6 +58,7 @@ class ReporteController extends Controller
     {
         $mesActual = Carbon::now()->month;
         $citasPorMes = Cita::selectRaw('MONTH(fecha) as mes, COUNT(*) as total')
+            ->where('estado', 'Cita Concluida')
             ->groupBy('mes')
             ->get()
             ->map(fn($item) => [

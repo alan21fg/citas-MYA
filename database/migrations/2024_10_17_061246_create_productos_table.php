@@ -13,8 +13,6 @@ return new class extends Migration {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_producto', 100)->nullable(false);
-            $table->string('descripcion');
-            $table->double('precio_unitario', 8, 2)->nullable(false);
             $table->string('tipo', 50)->nullable(false);
             $table->date('fecha_caducidad')->nullable(false);
             $table->timestamps();

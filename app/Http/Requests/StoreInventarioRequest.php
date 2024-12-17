@@ -23,9 +23,11 @@ class StoreInventarioRequest extends FormRequest
     {
         return [
             'id_producto' => 'required',
+            'descripcion' => 'nullable|string',
             'cantidad_disponible' => 'required|integer|min:0',
             'punto_reorden' => 'required|integer|min:0',
             'precio_compra' => 'required|numeric',
+            'precio_venta' => 'required|numeric',
         ];
     }
 }

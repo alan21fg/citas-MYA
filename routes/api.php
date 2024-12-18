@@ -36,5 +36,6 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::get('reportes/citas-por-mes', [ReporteController::class, 'reporteCitasPorMes']);
 
     Route::delete('servicios/{idServicio}/productos/{idProducto}', [ServicioController::class, 'eliminarProductoDeServicio']);
+    Route::post('citas/verificar-disponibilidad', [CitaController::class, 'verificarDisponibilidad']);
 
 });

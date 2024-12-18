@@ -103,4 +103,101 @@ class CitaController extends Controller
             }
         }
     }
+
+    /**
+     * Verifica la disponibilidad de horarios en una fecha específica.
+     */
+    public function verificarDisponibilidad(Request $request)
+    {
+        $request->validate([
+            'fecha' => 'required|date',
+            'id_servicio' => 'required|exists:servicios,id',
+            'id_empleado' => 'nullable|exists:empleados,id',
+        ]);
+
+        $fecha = $request->input('fecha');
+        $idServicio = $request->input('id_servicio');
+        $idEmpleado = $request->input('id_empleado');
+
+        // Obtener la duración del servicio
+        $duracionServicio = \App\Models\Servicio::find($idServicio)->duracion;
+
+        // Obtener citas para la fecha dada
+        $citasEnFecha = Cita::where('fecha', $fecha)
+            ->when($idEmpleado, function ($query) use ($idEmpleado) {
+                return $query->where('id_empleado', $idEmpleado);
+            })
+            ->get(['hora']);
+
+        // Convertir las horas ocupadas a rangos de minutos
+        $horariosOcupados = $citasEnFecha->map(function ($cita) use ($duracionServicio) {
+            $inicio = $this->convertirHoraAMinutos($cita->hora);
+            $fin = $inicio + $duracionServicio;
+            return ['inicio' => $inicio, 'fin' => $fin];
+        });
+
+        // Calcular horarios disponibles
+        $horariosDisponibles = $this->calcularHorariosDisponibles($horariosOcupados);
+
+        return response()->json([
+            'fecha' => $fecha,
+            'horarios_disponibles' => $horariosDisponibles,
+        ]);
+    }
+
+    /**
+     * Convierte una hora en formato HH:MM a minutos.
+     */
+    private function convertirHoraAMinutos(string $hora): int
+    {
+        [$horas, $minutos] = explode(':', $hora);
+        return $horas * 60 + $minutos;
+    }
+
+    /**
+     * Calcula los horarios disponibles dados los rangos ocupados.
+     */
+    private function calcularHorariosDisponibles($horariosOcupados)
+    {
+        $horarioInicio = 10 * 60; // 10:00 AM
+        $horarioFin = 18 * 60; // 6:00 PM
+        $disponibles = [];
+
+        $inicioDisponible = $horarioInicio;
+
+        foreach ($horariosOcupados->sortBy('inicio') as $rango) {
+            if ($inicioDisponible < $rango['inicio']) {
+                $disponibles[] = [
+                    'inicio' => $inicioDisponible,
+                    'fin' => $rango['inicio'],
+                ];
+            }
+            $inicioDisponible = max($inicioDisponible, $rango['fin']);
+        }
+
+        if ($inicioDisponible < $horarioFin) {
+            $disponibles[] = [
+                'inicio' => $inicioDisponible,
+                'fin' => $horarioFin,
+            ];
+        }
+
+        return collect($disponibles)->map(function ($rango) {
+            return [
+                'inicio' => $this->convertirMinutosAHora($rango['inicio']),
+                'fin' => $this->convertirMinutosAHora($rango['fin']),
+            ];
+        });
+    }
+
+    /**
+     * Convierte minutos a formato HH:MM.
+     */
+    private function convertirMinutosAHora(int $minutos): string
+    {
+        $horas = floor($minutos / 60);
+        $mins = $minutos % 60;
+        return sprintf('%02d:%02d', $horas, $mins);
+    }
+
 }

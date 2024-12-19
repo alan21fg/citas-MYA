@@ -24,6 +24,22 @@ class CitaController extends Controller
      */
     public function store(StoreCitaRequest $request)
     {
+        $fecha = $request->input('fecha');
+        $hora = $request->input('hora');
+        $idCliente = $request->input('id_cliente');
+
+        // Verificar si el cliente ya tiene una cita en la misma fecha y hora
+        $citaExistente = Cita::where('fecha', $fecha)
+            ->where('hora', $hora)
+            ->where('id_cliente', $idCliente)
+            ->exists();
+
+        if ($citaExistente) {
+            return response()->json([
+                'error' => 'El cliente ya tiene una cita agendada en la misma fecha y hora.',
+            ], 400);
+        }
+
         $cita = Cita::create($request->validated());
         return response()->json($cita, 201);
     }
@@ -111,13 +127,31 @@ class CitaController extends Controller
     {
         $request->validate([
             'fecha' => 'required|date',
+            'hora' => 'nullable|date_format:H:i',
+            'id_cliente' => 'required|exists:clientes,id',
             'id_servicio' => 'required|exists:servicios,id',
             'id_empleado' => 'nullable|exists:empleados,id',
         ]);
 
         $fecha = $request->input('fecha');
+        $hora = $request->input('hora');
+        $idCliente = $request->input('id_cliente');
         $idServicio = $request->input('id_servicio');
         $idEmpleado = $request->input('id_empleado');
+
+        // Validar si el cliente ya tiene una cita en la misma fecha y hora
+        if ($hora) {
+            $citaCliente = Cita::where('fecha', $fecha)
+                ->where('hora', $hora)
+                ->where('id_cliente', $idCliente)
+                ->exists();
+
+            if ($citaCliente) {
+                return response()->json([
+                    'error' => 'El cliente ya tiene una cita agendada en la misma fecha y hora.',
+                ], 400);
+            }
+        }
 
         // Obtener la duración del servicio
         $duracionServicio = \App\Models\Servicio::find($idServicio)->duracion;
@@ -144,6 +178,7 @@ class CitaController extends Controller
             'horarios_disponibles' => $horariosDisponibles,
         ]);
     }
+
 
     /**
      * Convierte una hora en formato HH:MM a minutos.
@@ -200,4 +235,19 @@ class CitaController extends Controller
         return sprintf('%02d:%02d', $horas, $mins);
     }
 
+    public function obtenerCitasPorCliente($idCliente)
+    {
+        // Validar que el cliente existe
+        if (!\App\Models\Cliente::find($idCliente)) {
+            return response()->json(['error' => 'Cliente no encontrado'], 404);
+        }
+
+        // Obtener las citas del cliente
+        $citas = Cita::where('id_cliente', $idCliente)
+            ->orderBy('fecha', 'asc')
+            ->orderBy('hora', 'asc')
+            ->get(['fecha', 'hora']);
+
+        return response()->json($citas, 200);
+    }
 }
